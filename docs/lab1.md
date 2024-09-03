@@ -1,4 +1,4 @@
-#lab 1 screenshot
-##by: Kenneth Vincent
+# lab 1 screenshot
+## by: Kenneth Vincent
 
-![Screenshot of the hello.c file printing out two lines of string](/assets/hello.png)
+![Screenshot of the hello.c file printing out two lines of string](assets/hello.png)
