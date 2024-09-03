@@ -53,7 +53,7 @@ For future refrence, I will be using [GitHub Docs](https://docs.github.com/en).
 ### images
 
 my favorite movie in one image
-![Screenshot of the Shrek movie poster.](/assets/Shrek.jpg)
+![Screenshot of the Shrek movie poster.](assets/Shrek.jpg)
 
 
 
