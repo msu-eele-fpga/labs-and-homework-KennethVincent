@@ -1,6 +1,9 @@
+# Compile of synchronizer.vhd was successful.
+# Compile of synchronizer_tb.vhd was successful.
+# 2 compiles, 0 failed with no errors.
 vsim -gui work.synchronizer_tb
 # vsim -gui work.synchronizer_tb 
-# Start time: 15:39:10 on Sep 06,2024
+# Start time: 16:23:47 on Sep 06,2024
 # Loading std.standard
 # Loading std.textio(body)
 # Loading ieee.std_logic_1164(body)
@@ -14,5 +17,5 @@ run -all
 #    Time: 100 ns  Iteration: 0  Instance: /synchronizer_tb
 # 1
 # Break in Process check_output at C:/Users/Kenne/labs-and-homework-KennethVincent/sim/synchronizer/synchronizer_tb.vhd line 111
-# End time: 15:40:45 on Sep 06,2024, Elapsed time: 0:01:35
-# Errors: 0, Warnings: 1
+# End time: 16:24:12 on Sep 06,2024, Elapsed time: 0:00:25
+# Errors: 0, Warnings: 2
