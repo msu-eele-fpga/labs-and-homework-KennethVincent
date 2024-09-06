@@ -1,0 +1,18 @@
+vsim -gui work.synchronizer_tb
+# vsim -gui work.synchronizer_tb 
+# Start time: 15:39:10 on Sep 06,2024
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading std.env(body)
+# Loading work.synchronizer_tb(testbench)
+# Loading ieee.numeric_std(body)
+# Loading ieee.std_logic_textio(body)
+# Loading work.synchronizer(architecture_synchronizer)
+run -all
+# ** Note: all tests passed!
+#    Time: 100 ns  Iteration: 0  Instance: /synchronizer_tb
+# 1
+# Break in Process check_output at C:/Users/Kenne/labs-and-homework-KennethVincent/sim/synchronizer/synchronizer_tb.vhd line 111
+# End time: 15:40:45 on Sep 06,2024, Elapsed time: 0:01:35
+# Errors: 0, Warnings: 1

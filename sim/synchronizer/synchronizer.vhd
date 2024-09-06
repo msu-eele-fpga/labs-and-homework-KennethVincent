@@ -1,5 +1,5 @@
 library IEEE;
-use IEEE.std_logic_1164.all
+use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use IEEE.std_logic_textio.all;
 
@@ -20,7 +20,7 @@ architecture architecture_synchronizer of synchronizer is
 			begin
 				if rising_edge(clk) then 
 					transfer <= async; sync <= transfer;
-				end if
+				end if;
 		end process;
 	
 end architecture;
