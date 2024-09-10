@@ -2,12 +2,12 @@ library ieee;
 use ieee.std_logic_1164.all;
 use work.print_pkg.all;
 use work.assert_pkg.all;
-use worl.tb_pkg.all;
+use work.tb_pkg.all;
 
 entity timed_counter_tb is 
 end entity timed_counter_tb;
 
-architecture testbench of timed_counter is
+architecture testbench of timed_counter_tb is
 
 	component timed_counter is
 		generic (
@@ -28,13 +28,34 @@ architecture testbench of timed_counter is
 
 	constant HUNDRED_NS : time := 100 ns;
 
+	constant five_100 : time := 500 ns;
+
+	procedure predict_counter_done (
+		constant count_time : in time;
+		signal enable  	    : in boolean;
+		signal done	    : in boolean;
+		constant count_iter : in natural
+	) is
+		begin
+			if enable then
+				if count_iter < (count_time / CLK_PERIOD) then
+					assert_false(done, "counter not done");
+				else
+					assert_true(done, "counter is done");
+					print("counter is done");
+				end if;
+			else
+				assert_false(done, "counter not enable");
+			end if;
+	end procedure predict_counter_done;
+
 begin
 
 	dut_100ns_counter : component timed_counter
 		generic map (
 			clk_period => CLK_PERIOD,
 			count_time => HUNDRED_NS
-		);
+		)
 		port map (
 			clk => clk_tb,
 			enable => enable_100ns_tb,
@@ -45,7 +66,6 @@ begin
 
 		stimuli_and_checker : process is
 			begin
-
 				-- test 100 ns timer when it's enabled
 				print("testing 100 ns timer: enabled");
 				wait_for_clock_edge(clk_tb);
@@ -53,12 +73,34 @@ begin
 
 				-- loop for the number of clock cycles that is equal to the timer's period
 				for i in 0 to (HUNDRED_NS / CLK_PERIOD) loop
-					wait_for clock_edge(clk_tb);
-					-- test whether the counter's done ouput is correct or not
+					wait_for_clock_edge(clk_tb);
+					predict_counter_done(HUNDRED_NS, enable_100ns_tb, done_100ns_tb, i);
+
 				end loop;
 				
 				-- add other test cases here
-				
+
+				print("testing 100 ns timer twice: disabled");
+				--test case two
+				wait_for_clock_edge(clk_tb);
+				enable_100ns_tb <= false;
+				for i in 0 to (2*(HUNDRED_NS / CLK_PERIOD)) loop
+					wait_for_clock_edge(clk_tb);
+					predict_counter_done(HUNDRED_NS, enable_100ns_tb, done_100ns_tb, i);
+
+				end loop;
+
+				--test case three
+				print("testing 100 ns timer 4 times: enabled");
+				wait_for_clock_edge(clk_tb);
+				enable_100ns_tb <= true;
+				for j in 0 to 4 loop
+					for i in 0 to ((HUNDRED_NS / CLK_PERIOD)) loop
+						wait_for_clock_edge(clk_tb);
+						predict_counter_done(HUNDRED_NS, enable_100ns_tb, done_100ns_tb, i);
+
+					end loop;
+				end loop;
 				-- testbench is done :)
 				std.env.finish;
 
