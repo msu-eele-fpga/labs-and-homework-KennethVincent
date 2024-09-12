@@ -7,4 +7,4 @@ This homework is about making a timed counter and its testbench
 
 ## Deliverables
 
-![Screenshot of ModelSim running the timed counter with no failure.](docs/assets/hw4.png)
+![Screenshot of ModelSim running the timed counter with no failure.](assets/hw4.png)
