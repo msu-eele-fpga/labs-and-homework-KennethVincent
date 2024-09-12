@@ -144,3 +144,16 @@ run -all
 # counter is done
 # 1
 # Break in Process stimuli_and_checker_2 at C:/Users/Kenne/labs-and-homework-KennethVincent/sim/timed-counter/timed_counter_tb.vhd line 164
+quit -sim
+# Project file C:/Users/Kenne/labs-and-homework-KennethVincent/sim/timed-counter/timed-counter-sim.mpf is write protected, data cannot be saved.
+# Unable to save project.
+# End time: 18:19:34 on Sep 11,2024, Elapsed time: 1:30:46
+# Errors: 0, Warnings: 0
+# Error opening C:/Users/Kenne/labs-and-homework-KennethVincent/sim/common/tb_pkg.vhd
+# Path name 'C:/Users/Kenne/labs-and-homework-KennethVincent/sim/common/tb_pkg.vhd' doesn't exist.
+# Error opening C:/Users/Kenne/labs-and-homework-KennethVincent/sim/common/tb_pkg.vhd
+# Path name 'C:/Users/Kenne/labs-and-homework-KennethVincent/sim/common/tb_pkg.vhd' doesn't exist.
+# Error opening C:/Users/Kenne/labs-and-homework-KennethVincent/sim/common/tb_pkg.vhd
+# Path name 'C:/Users/Kenne/labs-and-homework-KennethVincent/sim/common/tb_pkg.vhd' doesn't exist.
+# Error opening C:/Users/Kenne/labs-and-homework-KennethVincent/hdl/timed-counter/timed_counter.vhd
+# Path name 'C:/Users/Kenne/labs-and-homework-KennethVincent/hdl/timed-counter/timed_counter.vhd' doesn't exist.
