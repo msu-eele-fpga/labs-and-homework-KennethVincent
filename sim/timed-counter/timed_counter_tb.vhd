@@ -107,7 +107,7 @@ begin
 				end loop;
 				-- testbench is done :)
 				--std.env.finish;
-
+			wait;
 		end process stimuli_and_checker;
 
 	dut_500ns_counter : component timed_counter
