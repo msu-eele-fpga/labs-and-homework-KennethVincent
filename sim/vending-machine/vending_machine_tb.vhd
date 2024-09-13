@@ -5,6 +5,7 @@
 --  Summary: https://creativecommons.org/publicdomain/zero/1.0/
 --  Full text: https://creativecommons.org/publicdomain/zero/1.0/legalcode
 -- Modified by Trevor Vannoy; Copyright 2024
+-- modified by Kenneth Vincent: fixed the error
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -81,8 +82,8 @@ begin
 
     for i in 1 to 5 loop
       -- Assign the coins to the DUV
-      nickel_tb <= transaction_data.nickels(i);
-      dime_tb   <= transaction_data.dimes(i);
+      transaction_data.nickels(i) <= nickel_tb;
+      transaction_data.dimes(i) <= dime_tb;
 
       wait_for_clock_edge(clk_tb);
     end loop;
