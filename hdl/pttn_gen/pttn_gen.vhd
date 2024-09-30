@@ -26,45 +26,90 @@ end entity pttn_gen;
 
 architecture Patterns in pttn_gen is
 
+	count : Integer;
+	
 	begin
 
 		pattern0 : process (base_period)
 			begin
 				if(rst = '0') then
-				elsif(clk'event and clk = '1') then
-
+					count <= '0';
+					pttn0 <= '0';
+				elsif(half_base_period'event and half_base_period = '1') then
+					if(count = '0' or count = '7') then
+						count <= '0';
+						pttn0 <= '64';
+					else
+						count <= count + 1;
+						pttn0 <= pttn0 srl 1;
+					end if;
 				end if;
 		end process;
 
 		pattern1 : process (base_period)
 			begin
 				if(rst = '0') then
-				elsif(clk'event and clk = '1') then
-
+					count <= '0';
+					pttn1 <= '0';
+				elsif(x2_base_period'event and x2_base_period = '1') then
+					if(count = '0' or count = '7') then
+						count <= '0';
+						pttn1 <= '3';
+					else
+						count <= count + 1;
+						pttn1 <= pttn1 sll 1;
+					end if;
 				end if;
 		end process;
 
-		pattern2 : process (base_period)
+		pattern2 : process (rst, fourth_base_period)
 			begin
 				if(rst = '0') then
-				elsif(clk'event and clk = '1') then
-
+					count <= '0';
+					pttn2 <= '0';
+				elsif(fourth_base_period'event and fourth_base_period = '1') then
+					if(count = '0' or count = '7') then
+						count <= '0';
+						pttn2 <= '64';
+					else
+						count <= count + 1;
+						pttn2 <= pttn2 ror 1;
+					end if;
 				end if;
 		end process;
 
-		pattern3 : process (base_period)
+		pattern3 : process (rst, eight_base_period)
 			begin
 				if(rst = '0') then
-				elsif(clk'event and clk = '1') then
-
+					count <= '0';
+					pttn3 <= '0';
+				elsif(eight_base_period'event and eight_base_period = '1') then
+					if(count = '0' or count = '7') then
+						count <= '0';
+						pttn3 <= '1';
+					else
+						count <= count + 1;
+						pttn3 <= pttn3 rol 1;
+					end if;
 				end if;
 		end process;
 
-		pattern4 : process (base_period)
+		pattern4 : process (rst, eight_base_period)
 			begin
 				if(rst = '0') then
-				elsif(clk'event and clk = '1') then
-
+					count <= '0';
+					pttn4 <= '0';
+				elsif(x4_base_period'event and x4_base_period = '1') then
+					if(count = '2') then
+						count <= '0';
+						pttn4 <= '8';
+					elsif(count = '1') then
+						count <= count + 1;
+						pttn4 <= '20';
+					else
+						count <= count + 1;
+						pttn4 <= '129';
+					end if;
 				end if;
 		end process;
 end architecture Patterns;
