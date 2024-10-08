@@ -6,112 +6,153 @@ use work.assert_pkg.all;
 use work.print_pkg.all;
 use work.tb_pkg.all;
 
+
 entity clk_gen is
 	port (
 		clk         	   : in std_ulogic;
 		rst 	           : in std_ulogic;
-		base_period        : in unsigned;
-		pttn0_period       : out unsigned;
-		pttn1_period       : out unsigned;
-		pttn2_period       : out unsigned;
-		pttn3_period       : out unsigned;
-		pttn4_period       : out unsigned;
+		base_period        : in unsigned(7 downto 0);
+		pttnb_clk	: out std_ulogic;
+		pttn0_clk       : out std_ulogic;
+		pttn1_clk       : out std_ulogic;
+		pttn2_clk       : out std_ulogic;
+		pttn3_clk       : out std_ulogic;
+		pttn4_clk       : out std_ulogic
 	);
 end entity clk_gen;
 
-architecture clock in clk_gen is
-	signal count : Integer := '0';
-	signal clk_freq : Integer := '50000000';
-	half_base_period <= base_period ror 1; 
-	x2_base_period <= base_period rol 1;
-	fourth_base_period <= base_period ror 2; 
-	eight_base_period <= base_period ror 4;
-	x4_base_period <= base_period rol 2;
-	signal Integer : period_0 := clk_freq * half_base_period;
-	signal Integer : period_1 := clk_freq * x2_base_period;
-	signal Integer : period_2 := clk_freq * fourth_base_period;
-	signal Integer : period_3 := clk_freq * eight_base_period;
-	signal Integer : period_4 := clk_freq * x4_base_period;
+architecture clock of clk_gen is
+	--signal pttnb_clk : std_ulogic;
+	signal countb : Integer := 0;
+	signal count0 : Integer := 0;
+	signal count1 : Integer := 0;
+	signal count2 : Integer := 0;
+	signal count3 : Integer := 0;
+	signal count4 : Integer := 0;
+	signal clk_freq : unsigned(25 downto 0) := "00000000000000000111110100";
+	-- 50 Mhz "10111110101111000010000000"
+	signal period_base : unsigned(33 downto 0);
+	signal half_base_period : unsigned(33 downto 0); 
+	signal x2_base_period : unsigned(33 downto 0); 
+	signal fourth_base_period : unsigned(33 downto 0); 
+	signal eight_base_period : unsigned(33 downto 0); 
+	signal x4_base_period : unsigned(33 downto 0); 
+
+	signal pB_clk_temp : std_ulogic := '1';
+	signal p0_clk_temp : std_ulogic := '1';
+	signal p1_clk_temp : std_ulogic := '1';
+	signal p2_clk_temp : std_ulogic := '1';
+	signal p3_clk_temp : std_ulogic := '1';
+	signal p4_clk_temp : std_ulogic := '1';
 
 	begin
+
+		period_base <=  clk_freq * base_period;
+
+		half_base_period <= shift_right(period_base, 1);
+		x2_base_period <=  shift_left(period_base ,1);
+		fourth_base_period <= shift_right(period_base ,2);
+		eight_base_period <= shift_right(period_base ,3);
+		x4_base_period <= shift_left(period_base ,2);
+		
+		clk_counterB : process (clk, rst)
+			begin
+				if(rst = '0') then
+					countb <= 0;
+				elsif(clk'event and clk = '1') then
+					if(countb = shift_right(period_base, 1)) then
+						pb_clk_temp <= not pb_clk_temp;
+						countb <= 0;
+					else
+						countb <= countb + 1;
+						pb_clk_temp <= pb_clk_temp;
+					end if;
+				end if;
+		end process;
+		pttnb_clk <= pb_clk_temp;
+
 		clk_counter0 : process (clk, rst)
 			begin
 				if(rst = '0') then
-					count = '0';
+					count0 <= 0;
 				elsif(clk'event and clk = '1') then
-					if(count = (half_base_period ror 1)) then
-						pttn0_period <= '1';
-						count <= 0;
+					if(count0 = shift_right(half_base_period, 1)) then
+						p0_clk_temp <= not p0_clk_temp;
+						count0 <= 0;
 					else
-						pttn0_period <= 0;
-						count <= count + 1;
+						count0 <= count0 + 1;
+						p0_clk_temp <= p0_clk_temp;
 					end if;
 				end if;
-
 		end process;
+		pttn0_clk <= p0_clk_temp;
 
 		clk_counter1 : process (clk, rst)
 			begin
 				if(rst = '0') then
-					count = '0';
+					count1 <= 0;
 				elsif(clk'event and clk = '1') then
-					if(count = (x2_base_period ror 1)) then
-						pttn0_period <= '1';
-						count <= 0;
+					if(count1 = shift_right(x2_base_period, 1)) then
+						p1_clk_temp <= not p1_clk_temp;
+						count1 <= 0;
 					else
-						pttn0_period <= 0;
-						count <= count + 1;
+						count1 <= count1 + 1;
+						p1_clk_temp <= p1_clk_temp;
 					end if;
 				end if;
 
 		end process;
+		pttn1_clk <= p1_clk_temp;
 
 		clk_counter2 : process (clk, rst)
 			begin
 				if(rst = '0') then
-					count = '0';
+					count2 <= 0;
 				elsif(clk'event and clk = '1') then
-					if(count = (fourth_base_period ror 1)) then
-						pttn0_period <= '1';
-						count <= 0;
+					if(count2 = shift_right(fourth_base_period, 1)) then
+						p2_clk_temp <= not p2_clk_temp;
+						count2 <= 0;
 					else
-						pttn0_period <= 0;
-						count <= count + 1;
+						count2 <= count2 + 1;
+						p2_clk_temp <= p2_clk_temp;
 					end if;
 				end if;
 
 		end process;
+		pttn2_clk <= p2_clk_temp;
 
 		clk_counter3 : process (clk, rst)
 			begin
 				if(rst = '0') then
-					count = '0';
+					count3 <= 0;
 				elsif(clk'event and clk = '1') then
-					if(count = (eight_base_period ror 1)) then
-						pttn0_period <= '1';
-						count <= 0;
+					if(count3 = shift_right(eight_base_period, 1)) then
+						p3_clk_temp <= not p3_clk_temp;
+						count3 <= 0;
 					else
-						pttn0_period <= 0;
-						count <= count + 1;
+						count3 <= count3 + 1;
+						p3_clk_temp <= p3_clk_temp;
 					end if;
 				end if;
 
 		end process;
+		pttn3_clk <= p3_clk_temp;
 
 		clk_counter4 : process (clk, rst)
 			begin
 				if(rst = '0') then
-					count = '0';
+					count4 <= 0;
 				elsif(clk'event and clk = '1') then
-					if(count = (x4_base_period ror 1)) then
-						pttn0_period <= '1';
-						count <= 0;
+					if(count4 = shift_right(x4_base_period, 1)) then
+						p4_clk_temp <= not p4_clk_temp;
+						count4 <= 0;
 					else
-						pttn0_period <= 0;
-						count <= count + 1;
+						count4 <= count4 + 1;
+						p4_clk_temp <= p4_clk_temp;
 					end if;
 				end if;
 
 		end process;
+		pttn4_clk <= p4_clk_temp;
 		
 end architecture clock;
