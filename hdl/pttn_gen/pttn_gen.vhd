@@ -2,9 +2,9 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use IEEE.std_logic_textio.all;
-use work.assert_pkg.all;
-use work.print_pkg.all;
-use work.tb_pkg.all;
+--use work.assert_pkg.all;
+--use work.print_pkg.all;
+--use work.tb_pkg.all;
 
 
 entity pttn_gen is
@@ -27,6 +27,10 @@ entity pttn_gen is
 end entity pttn_gen;
 
 architecture Patterns of pttn_gen is
+	signal temp1  : std_ulogic_vector(6 downto 0) := "1000000";
+	signal temp2  : std_ulogic_vector(6 downto 0) := "0000011";
+	signal temp3  : std_ulogic_vector(6 downto 0) := "0000000";
+	signal temp4  : std_ulogic_vector(6 downto 0) := "1111111";
 	signal countb : Integer := 0;
 	signal count0 : Integer := 0;
 	signal count1 : Integer := 0;
@@ -60,9 +64,11 @@ architecture Patterns of pttn_gen is
 					if(count0 = 7) then
 						count0 <= 0;
 						pttn0 <= "1000000";
+						temp1 <= "1000000";
 					else
 						count0 <= count0 + 1;
-						pttn0 <= pttn0 srl 1;
+						temp1 <= std_ulogic_vector(shift_right(unsigned(temp1), 1));
+						pttn0 <= temp1;
 					end if;
 				end if;
 		end process;
@@ -76,9 +82,11 @@ architecture Patterns of pttn_gen is
 					if(count1 = 7) then
 						count1 <= 0;
 						pttn1 <= "0000011";
+						temp2 <= "0000011";
 					else
 						count1 <= count1 + 1;
-						pttn1 <= pttn1 sll 1;
+						temp2 <= std_ulogic_vector(shift_left(unsigned(temp2), 1));
+						pttn1 <= temp2;
 					end if;
 				end if;
 		end process;
@@ -92,9 +100,11 @@ architecture Patterns of pttn_gen is
 					if(count2 = 127) then
 						count2 <= 0;
 						pttn2 <= "0000000";
+						temp3 <= "0000000";
 					else
 						count2 <= count2 + 1;
-						pttn2 <= std_logic_vector(to_unsigned(count2, pttn2'length));
+						temp3 <= std_ulogic_vector(to_unsigned(count2, temp3'length));
+						pttn2 <= temp3;
 					end if;
 				end if;
 		end process;
@@ -108,9 +118,11 @@ architecture Patterns of pttn_gen is
 					if(count3 = 0) then
 						count3 <= 127;
 						pttn3 <= "1111111";
+						temp4 <= "1111111";
 					else
 						count3 <= count3 - 1;
-						pttn3 <= std_logic_vector(to_unsigned(count3, pttn3'length));
+						temp4 <= std_ulogic_vector(to_unsigned(count3, temp4'length));
+						pttn3 <= temp4;
 					end if;
 				end if;
 		end process;

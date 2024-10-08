@@ -2,9 +2,9 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use IEEE.std_logic_textio.all;
-use work.assert_pkg.all;
-use work.print_pkg.all;
-use work.tb_pkg.all;
+--use work.assert_pkg.all;
+--use work.print_pkg.all;
+--use work.tb_pkg.all;
 
 entity led_pattern is
 	port(
@@ -68,7 +68,7 @@ architecture LED of led_pattern is
 			fourth_base_period : in std_ulogic;
 			eight_base_period  : in std_ulogic;
 			x4_base_period     : in std_ulogic;
-			pttnb		   : out std_ulogic_vector(7 downto 0);
+			pttnb		   : out std_ulogic;
 			pttn0		   : out std_ulogic_vector(6 downto 0);
 			pttn1		   : out std_ulogic_vector(6 downto 0);
 			pttn2		   : out std_ulogic_vector(6 downto 0);
@@ -95,7 +95,7 @@ architecture LED of led_pattern is
 	signal clk_gen_out4 : std_ulogic;
 
 	--output for pattern generator
-	signal patternb : std_ulogic_vector(7 downto 0);
+	signal patternb : std_ulogic;
 	signal pattern0 : std_ulogic_vector(6 downto 0);
 	signal pattern1 : std_ulogic_vector(6 downto 0);
 	signal pattern2 : std_ulogic_vector(6 downto 0);
@@ -103,7 +103,7 @@ architecture LED of led_pattern is
 	signal pattern4 : std_ulogic_vector(6 downto 0);
 	
 	-- output for the led FSM
-	signal fsm_output : std_ulogic_vector(6 downto 0);
+	signal fsm_output : std_ulogic_vector(7 downto 0);
 
 	-- for the fsm
 	type State_type is (s_0, display, s_1, s_2, s_3, s_4);
@@ -114,7 +114,7 @@ architecture LED of led_pattern is
 		U1 : aysnc_conditioner  port map(clk => clk, rst => rst,async => PB, sync => sync_out);
 
 		U2 : clk_gen 		port map(clk => clk, rst => rst, base_period => unsigned(base_rate), pttnb_clk => clk_gen_outb,
-						 pttn1_clk => clk_gen_out1, pttn2_clk => clk_gen_out2, pttn3_clk => clk_gen_out3,
+						 pttn0_clk => clk_gen_out0, pttn1_clk => clk_gen_out1, pttn2_clk => clk_gen_out2, pttn3_clk => clk_gen_out3,
 						 pttn4_clk => clk_gen_out4);
 
 		U3 : pttn_gen 		port map(clk => clk, rst => rst, base_period => clk_gen_outb, half_base_period => clk_gen_out0,
@@ -126,12 +126,13 @@ architecture LED of led_pattern is
 		U4 : timed_counter	generic map(clk_period => 20 ns, count_time => 1 sec)
 					port map(clk => clk, enable => enable, done => done);
 --------------------------------------------------------------------------------------------------------------------------------
-		choice : process(HPS_LED_control)
+		choice : process(HPS_LED_control, LED_reg, fsm_output)
 			begin
 				if (HPS_LED_control = '1') then
 					LED <= LED_reg;
 				else
-					LED <= fsm_output;
+					LED <= std_logic_vector(fsm_output);
+
 				end if;
 		end process;
 
@@ -142,10 +143,11 @@ architecture LED of led_pattern is
 					current_state <= s_0;
 				elsif (clk'event and clk='1') then
 					current_state <= next_state;
+					--prevoius <= current_state;
 				end if;
 		end process;
 --------------------------------------------------------------------------------------------------------------------------------
-	NEXT_STATE_LOGIC : process (current_state, SW, PB)
+	NEXT_STATE_LOGIC : process (current_state, SW, PB, done)
 			begin
 				case (current_state) is
 					when s_0 => if(PB = '1') then
@@ -173,26 +175,28 @@ architecture LED of led_pattern is
 						     else
 							 next_state <= s_4;
 						     end if;
-					when display => if(SW = "0000") then
-							        next_state <= s_0;
-							elsif(SW = "0001") then
-								next_state <= s_1;
-							elsif(SW = "0010") then
-								next_state <= s_2;
-							elsif(SW = "0100") then
-								next_state <= s_3;
-							elsif(SW = "1000") then
-								next_state <= s_4;
-							elsif(done = false) then
+					when display => if(done = false) then
 								next_state <= display;
-							else
-								next_state <= display;
-							end if;
+								else
+									if(SW = "0000") then
+										next_state <= s_0;
+									elsif(SW = "0001") then
+										next_state <= s_1;
+									elsif(SW = "0010") then
+										next_state <= s_2;
+									elsif(SW = "0100") then
+										next_state <= s_3;
+									elsif(SW = "1000") then
+										next_state <= s_4;
+									else
+										next_state <= display;
+									end if;
+								end if;
 					when others => next_state <= s_0;
 				end case;
 		end process;
 --------------------------------------------------------------------------------------------------------------------------------
-	OUTPUT_LOGIC : process (current_state)
+	OUTPUT_LOGIC : process (current_state,patternb, pattern0, pattern1, pattern2, pattern3, pattern4, fsm_output, SW)
 		begin
 			case (current_state) is
 				when s_0 => fsm_output <= patternb & pattern0; enable <= false;

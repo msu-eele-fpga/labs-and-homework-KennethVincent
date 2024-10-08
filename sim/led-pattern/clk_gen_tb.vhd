@@ -16,6 +16,7 @@ architecture testbench of clk_gen_tb is
 			clk         	: in std_ulogic;
 			rst 	        : in std_ulogic;
 			base_period     : in unsigned(7 downto 0);
+			pttnb_clk	: out std_ulogic;
 			pttn0_clk        : out std_ulogic;
 			pttn1_clk       : out std_ulogic;
 			pttn2_clk        : out std_ulogic;
@@ -27,6 +28,7 @@ architecture testbench of clk_gen_tb is
   signal clk_tb                  : std_ulogic := '0';
   signal rst_tb                  : std_ulogic := '1';
   signal base_period_tb          : unsigned(7 downto 0) := "00000000";
+  signal pttnb_clk_tb            : std_ulogic := '0';
   signal pttn0_clk_tb            : std_ulogic := '0';
   signal pttn1_clk_tb            : std_ulogic := '0';
   signal pttn2_clk_tb            : std_ulogic := '0';
@@ -41,6 +43,7 @@ begin
 	clk => clk_tb,
 	rst => rst_tb,
 	base_period => base_period_tb,
+	pttnb_clk => pttnb_clk_tb,
 	pttn0_clk => pttn0_clk_tb,
 	pttn1_clk => pttn1_clk_tb,
 	pttn2_clk => pttn2_clk_tb,
