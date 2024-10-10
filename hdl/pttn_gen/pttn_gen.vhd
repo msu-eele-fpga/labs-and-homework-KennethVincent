@@ -73,12 +73,12 @@ architecture Patterns of pttn_gen is
 				end if;
 		end process;
 
-		pattern1 : process (rst, x2_base_period)
+		pattern1 : process (rst, fourth_base_period)
 			begin
 				if(rst = '0') then
 					count1 <= 0;
 					pttn1 <= "0000000";
-				elsif(rising_edge(x2_base_period)) then
+				elsif(rising_edge(fourth_base_period)) then
 					if(count1 = 7) then
 						count1 <= 0;
 						pttn1 <= "0000011";
@@ -91,12 +91,12 @@ architecture Patterns of pttn_gen is
 				end if;
 		end process;
 
-		pattern2 : process (rst, fourth_base_period)
+		pattern2 : process (rst, x2_base_period)
 			begin
 				if(rst = '0') then
 					count2 <= 0;
 					pttn2 <= "0000000";
-				elsif(fourth_base_period'event and fourth_base_period = '1') then
+				elsif(x2_base_period'event and x2_base_period = '1') then
 					if(count2 = 127) then
 						count2 <= 0;
 						pttn2 <= "0000000";
@@ -127,7 +127,7 @@ architecture Patterns of pttn_gen is
 				end if;
 		end process;
 
-		pattern4 : process (rst, eight_base_period)
+		pattern4 : process (rst, x4_base_period)
 			begin
 				if(rst = '0') then
 					count4 <= 0;
