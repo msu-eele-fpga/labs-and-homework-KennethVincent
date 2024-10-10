@@ -2,9 +2,9 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use IEEE.std_logic_textio.all;
-use work.assert_pkg.all;
-use work.print_pkg.all;
-use work.tb_pkg.all;
+--use work.assert_pkg.all;
+--use work.print_pkg.all;
+--use work.tb_pkg.all;
 
 entity one_pulse is
 	port (

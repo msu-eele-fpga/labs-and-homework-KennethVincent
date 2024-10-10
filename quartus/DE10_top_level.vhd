@@ -32,7 +32,6 @@ USE altera.altera_primitives_components.all;
 		FPGA_CLK2_50  :  in std_logic;										--! 50 MHz clock input #2
 		FPGA_CLK3_50  :  in std_logic;										--! 50 MHz clock input #3
 		
-		
 		----------------------------------------
 		--  Push Button Inputs (KEY) 
 		--  See DE10 Nano User Manual page 24
@@ -51,7 +50,7 @@ USE altera.altera_primitives_components.all;
 		--  in the down position 
 		--  (towards the edge of the board)
 		----------------------------------------
-		SW  : in std_logic_vector(3 downto 0);								--! Four Slide Switches 
+		SW  : in std_ulogic_vector(3 downto 0);								--! Four Slide Switches 
 		
 		
 		----------------------------------------
@@ -89,12 +88,30 @@ end entity DE10_Top_Level;
 
 
 architecture DE10Nano_arch of DE10_Top_Level is
+	signal clk_cyc : std_logic_vector(31 downto 0) := "00000010111110101111000010000000";
+	signal br : std_logic_vector(7 downto 0) := "00001000";
+	signal set : std_logic := '0';
+	signal LED_r : std_logic_vector(7 downto 0) := "00000000";
+	
+	component led_pattern is
+		port(
+			clk		: in	std_ulogic;
+			rst		: in	std_ulogic;
+			SW		: in	std_ulogic_vector(3 downto 0);
+			PB		: in	std_ulogic;
+			HPS_LED_control : in 	std_logic;
+			SYS_CLKs_sec 	: in 	std_logic_vector(31 downto 0);
+			Base_rate 	: in 	std_logic_vector(7 downto 0);
+			LED_reg 	: in 	std_logic_vector(7 downto 0);
+			LED 		: out 	std_logic_vector(7 downto 0)
+		);
+	end component;
 
 begin
-	
--- Add VDHL code to connect the four switches (SW) to four LEDs
-	LED(3 downto 0) <= SW(3 downto 0);
-	LED(7 downto 4) <= "0000";
+		
+	S0: led_pattern port map(clk => FPGA_CLK1_50, rst => KEY(0), SW => SW, PB => not KEY(1), 
+				    HPS_LED_control => set, SYS_CLKs_sec => clk_cyc,
+					 base_rate => br, LED_reg => LED_r, LED => LED);
 	
 end architecture DE10Nano_arch;
 
