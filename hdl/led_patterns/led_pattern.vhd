@@ -107,7 +107,7 @@ architecture LED of led_pattern is
 
 	-- for the fsm
 	type State_type is (s_0, display, s_1, s_2, s_3, s_4);
-	signal current_state, next_state : State_Type;
+	signal current_state, next_state, prev_state : State_Type;
 
 
 	begin
@@ -142,12 +142,14 @@ architecture LED of led_pattern is
 				if (rst = '0') then
 					current_state <= s_0;
 				elsif (clk'event and clk='1') then
+					if(current_state /= display) then
+						prev_state <= current_state;
+					end if;
 					current_state <= next_state;
-					--prevoius <= current_state;
 				end if;
 		end process;
 --------------------------------------------------------------------------------------------------------------------------------
-	NEXT_STATE_LOGIC : process (current_state, SW, PB, done)
+	NEXT_STATE_LOGIC : process (current_state, prev_state, SW, PB, done)
 			begin
 				case (current_state) is
 					when s_0 => if(PB = '1') then
@@ -189,7 +191,7 @@ architecture LED of led_pattern is
 									elsif(SW = "1000") then
 										next_state <= s_4;
 									else
-										next_state <= display;
+										next_state <= prev_state;
 									end if;
 								end if;
 					when others => next_state <= s_0;
