@@ -186,9 +186,9 @@ architecture LED of led_pattern is
 										next_state <= s_1;
 									elsif(SW = "0010") then
 										next_state <= s_2;
-									elsif(SW = "0100") then
+									elsif(SW = "0011") then
 										next_state <= s_3;
-									elsif(SW = "1000") then
+									elsif(SW = "0100") then
 										next_state <= s_4;
 									else
 										next_state <= prev_state;
