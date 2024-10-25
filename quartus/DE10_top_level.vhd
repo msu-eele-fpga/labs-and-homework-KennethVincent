@@ -269,7 +269,7 @@ architecture DE10Nano_arch of DE10_Top_Level is
             hps_io_hps_io_gpio_inst_GPIO54  : inout std_logic                     := 'X';             -- hps_io_gpio_inst_GPIO54
             hps_io_hps_io_gpio_inst_GPIO61  : inout std_logic                     := 'X';             -- hps_io_gpio_inst_GPIO61
             led_patterns_pb                 : in    std_logic                     := 'X';             -- pb
-            led_patterns_sw                 : in    std_logic_vector(3 downto 0)  := (others => 'X'); -- sw
+            led_patterns_sw                 : in    std_ulogic_vector(3 downto 0)  := (others => 'X'); -- sw
             led_patterns_led                : out   std_logic_vector(7 downto 0);                     -- led
             memory_mem_a                    : out   std_logic_vector(14 downto 0);                    -- mem_a
             memory_mem_ba                   : out   std_logic_vector(2 downto 0);                     -- mem_ba
@@ -293,9 +293,7 @@ architecture DE10Nano_arch of DE10_Top_Level is
 
 begin
 		
-	S0: led_pattern port map(clk => FPGA_CLK1_50, rst => KEY(0), SW => SW, PB => not KEY(1), 
-				    HPS_LED_control => set, SYS_CLKs_sec => clk_cyc,
-					 base_rate => br, LED_reg => LED_r, LED => LED);
+	
 					 
 	u0 : component soc_system
     port map (
@@ -342,6 +340,8 @@ begin
       hps_io_hps_io_uart0_inst_rx    => hps_uart_rx,
       hps_io_hps_io_uart0_inst_tx    => hps_uart_tx,
       hps_io_hps_io_gpio_inst_gpio09 => hps_conv_usb_n,
+		
+		
 
       -- LTC connector
       hps_io_hps_io_gpio_inst_gpio40 => hps_ltc_gpio,
@@ -378,6 +378,10 @@ begin
       memory_mem_odt     => hps_ddr3_odt,
       memory_mem_dm      => hps_ddr3_dm,
       memory_oct_rzqin   => hps_ddr3_rzq,
+		
+		led_patterns_pb                 => not KEY(1),                 -- led_patterns.pb
+      led_patterns_sw                 => SW,                 --             .sw
+      led_patterns_led                => LED,
 
       clk_clk       => fpga_clk1_50,
       reset_reset_n => KEY(0)
