@@ -28,13 +28,19 @@ int main () {
 
 	ret = fread(&val, 4, 1, file);
 	printf("HPS_LED_control = 0x%x\n", val);
+	printf("fread ret = %d\n", ret);
+	printf("errno =%s\n", strerror(errno));
 
 	ret = fread(&val, 4, 1, file);
 	printf("base period = 0x%x\n", val);
+	printf("fread ret = %d\n", ret);
+	printf("errno =%s\n", strerror(errno));
 
 	ret = fread(&val, 4, 1, file);
 	printf("LED_reg = 0x%x\n", val);
-
+	printf("fread ret = %d\n", ret);
+	printf("errno =%s\n", strerror(errno));
+	
 	// Reset file position to 0
 	ret = fseek(file, 0, SEEK_SET);
 	printf("fseek ret = %d\n", ret);
@@ -47,6 +53,8 @@ int main () {
 	// Turn on software-control mode
 	val = 0x01;
     ret = fseek(file, HPS_LED_CONTROL_OFFSET, SEEK_SET);
+		printf("fseek ret = %d\n", ret);
+	printf("errno =%s\n", strerror(errno));
 	ret = fwrite(&val, 4, 1, file);
 	// We need to "flush" so the OS finishes writing to the file before our code continues.
 	fflush(file);
@@ -55,6 +63,8 @@ int main () {
 	printf("writing patterns to LEDs....\n");
 	val = 0x55;
     ret = fseek(file, LED_REG_OFFSET, SEEK_SET);
+		printf("fseek ret = %d\n", ret);
+	printf("errno =%s\n", strerror(errno));
 	ret = fwrite(&val, 4, 1, file);
 	fflush(file);
 
@@ -62,6 +72,8 @@ int main () {
 
 	val = 0xaa;
     ret = fseek(file, LED_REG_OFFSET, SEEK_SET);
+		printf("fseek ret = %d\n", ret);
+	printf("errno =%s\n", strerror(errno));
 	ret = fwrite(&val, 4, 1, file);
 	fflush(file);
 
